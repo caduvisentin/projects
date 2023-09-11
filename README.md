@@ -22,4 +22,8 @@ git add .
 
 git commit -m "mensagem"
 
-pit push
+git push
+
+git checkout -b
+
+git checkout [nome da branch]
