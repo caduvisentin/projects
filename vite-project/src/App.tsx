@@ -13,6 +13,10 @@ function App() {
     alert("Alerta Handle Click");
   }
 
+  const handleChange2 = (event:React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value)
+  }
+
   return (
     <>
       <Button />
@@ -22,6 +26,10 @@ function App() {
       <ButtonTwo onClick={handleClick}>
         Texto HandleClick
       </ButtonTwo>
+      <input type="text"
+        onChange={(event) => handleChange2(event)}>
+
+      </input>
     </>
   )
 }
