@@ -2,21 +2,18 @@ import { useState } from 'react'
 import './App.css'
 
 function App() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [schooling, setSchooling] = useState("Médio");
-  const [resume, setResume] = useState("");
+  const [formInfo, setFormInfo] = useState({
+    name:"",
+    email:"",
+    schooling:"médio",
+    resume:"",
+  });
   const [terms, setTerms] = useState(false);
   const [error, setError] = useState(false);
 
 
   const resetForm = () => {
-    setName("");
-    setEmail("");
-    setSchooling("Médio");
-    setResume("");
-    setTerms(false);
-    setError(false);
+    setFormInfo({name:"", email:"", schooling:"médio", resume:"",})
   }
 
   const validateEmail = (email: string) => {
@@ -26,20 +23,32 @@ function App() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!validateEmail(email)) {
+    if (!validateEmail(formInfo.email)) {
       alert("E-mail inválido!")
       setError(false);
     }
     if (terms) {
-      if (validateEmail(email)) {
+      if (validateEmail(formInfo.email)) {
         alert(
-          `Nome: ${name}\nE-mail: ${email}\nEscolaridade: ${schooling}\nExperiências: ${resume}`
+          `Nome: ${formInfo.name}\nE-mail: ${formInfo.email}\nEscolaridade: ${formInfo.schooling}\nExperiências: ${formInfo.resume}`
         );
         resetForm();
+        setTerms(false);
+        setError(false);
       }
     } else {
       setError(true);
     }
+  }
+
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = event.target;
+    setFormInfo({
+      ...formInfo,
+      [name]: value,
+    });
   }
 
   return (
@@ -47,15 +56,15 @@ function App() {
       <form onSubmit={(event) => handleSubmit(event)}>
         <label>
           Nome:
-          <input type="text" value={name} onChange={({ target }) => setName(target.value)} />
+          <input name="name" type="text" value={formInfo.name} onChange={handleChange} />
         </label>
         <label>
           E-mail:
-          <input type="text" value={email} onChange={({ target }) => setEmail(target.value)} />
+          <input name="email" type="text" value={formInfo.email} onChange={handleChange} />
         </label>
         <label>
           Escolaridade:
-          <select value={schooling} onChange={({ target }) => setSchooling(target.value)}>
+          <select name="schooling" value={formInfo.schooling} onChange={handleChange}>
             <option value="Médio">Médio</option>
             <option value="Superior">Superior</option>
             <option value="Pós-graduação">Pós-graduação</option>
@@ -63,10 +72,10 @@ function App() {
         </label>
         <label>
           Resumo das experiências:
-          <textarea value={resume} onChange={({ target }) => setResume(target.value)}></textarea>
+          <textarea name="resume" value={formInfo.resume} onChange={handleChange}></textarea>
         </label>
         <label>
-          <input type="checkbox" checked={terms} onChange={() => setTerms((prev) => !prev)} /> Aceito os termos e condições.
+          <input type="checkbox" checked={terms} onChange={() => setTerms(!terms)} /> Aceito os termos e condições.
         </label>
         <button>Enviar</button>
       </form>
